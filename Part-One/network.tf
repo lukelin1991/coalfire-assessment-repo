@@ -7,7 +7,7 @@ module "vpc" {
 
   azs             = ["us-east-2a", "us-east-2b"]
   public_subnets   = var.mgmt_subnet_cidrs   # Management
-  private_subnets = concat(var.app_subnet_cidrs, var.db_subnet_cidrs)   # Application + Backend
+  private_subnets = concat(var.app_subnet_cidrs, var.backend_subnet_cidrs)   # Application + Backend
 
   enable_nat_gateway = true
   single_nat_gateway = true

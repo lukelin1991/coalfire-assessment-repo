@@ -12,6 +12,7 @@ module "management_instance" {
   
   #for SG implementation later*** too many errors for now.
   vpc_security_group_ids = []
+
   tags = {
     Role = "mgmt-ec2"
   }
@@ -54,6 +55,14 @@ module "asg" {
   image_id               = var.ami_id
 
   security_groups = [aws_security_group.app_sg.id]
+
+  #uses traffic_source_attachments to attach to ALB target group - CURRENTLY BROKEN.
+  # traffic_source_attachments = {
+  #   alb_attachment = {
+  #     traffic_source_identifier = module.alb.target_groups["app_tg"].arn
+  #     traffic_source_type       = "elbv2"
+  #   }
+  # }
 
   tags = {
     Role = "app-asg"

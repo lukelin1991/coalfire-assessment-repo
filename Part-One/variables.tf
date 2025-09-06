@@ -22,8 +22,8 @@ variable "app_subnet_cidrs" {
   default     = ["10.1.3.0/24", "10.1.4.0/24"]
 }
 
-variable "db_subnet_cidrs" {
-  description = "CIDRs for private Database subnets"
+variable "backend_subnet_cidrs" {
+  description = "CIDRs for private Backend subnets"
   type        = list(string)
   default     = ["10.1.5.0/24", "10.1.6.0/24"]
 }

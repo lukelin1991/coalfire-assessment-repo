@@ -27,7 +27,7 @@ This is my attempt at Coalfire's Terraform Technical Assessment challenge, with 
     - [DONE] t2.micro sized
 
 ***Supporting Infrastructure***
-• One ALB that sends web traffic to the ec2’s in the ASG.
+  - [In-progress] One ALB that sends web traffic to the ec2’s in the ASG.
 The goal is working, deployable code — it can be minimal but must meet the requirements.
 
 ### Evaluation Criteria
