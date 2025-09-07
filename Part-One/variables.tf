@@ -36,7 +36,7 @@ variable "ami_id" {
 }
 
 variable "my_ip" {
-  description = "Your trusted IP address with CIDR notation (e.g.,"
+  description = "My Trusted IP address with CIDR notation"
   type = string
   default = "173.70.74.192/32" # current IP, change as needed
 }
