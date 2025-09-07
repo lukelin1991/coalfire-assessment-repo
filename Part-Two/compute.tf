@@ -38,7 +38,6 @@ module "management_instance" {
   ami           = var.ami_id
   subnet_id     = each.value
   
-  #for SG implementation later*** too many errors for now.
   vpc_security_group_ids = [aws_security_group.mgmt_ec2_sg.id]
 
   tags = {
@@ -46,7 +45,7 @@ module "management_instance" {
   }
 }
 
-# Security Group for ASG
+# Security Group for ASG (Adjusted for better security))
 resource "aws_security_group" "app_asg_sg" {
   name        = "app-asg-sg"
   description = "ASG instances security group"
@@ -70,11 +69,20 @@ resource "aws_security_group" "app_asg_sg" {
     security_groups          = [] # attach ALB SG later
   }
 
-  # Allow all outbound (default)
+  # Restrict outbound traffic to only necessary ports (HTTP, HTTPS)
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    description = "Allow outbound HTTP/HTTPS"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow outbound HTTPS"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -99,18 +107,28 @@ module "asg" {
   image_id               = var.ami_id
 
   security_groups = [aws_security_group.app_asg_sg.id]
-  
-  # user_data = file("${path.module}/scripts/install_apache.sh") #This script was suppose to install apache server, but throwing errors currently. 
-
-  #uses traffic_source_attachments to attach to ALB target group - CURRENTLY BROKEN.
-  # traffic_source_attachments = {
-  #   alb_attachment = {
-  #     traffic_source_identifier = module.alb.target_groups["app_tg"].arn
-  #     traffic_source_type       = "elbv2"
-  #   }
-  # }
 
   tags = {
     Role = "app-asg"
   }
+}
+
+# CloudWatch alarm to monitor CPU utilization on ASG instances
+resource "aws_cloudwatch_metric_alarm" "asg_cpu_high" {
+  alarm_name          = "asg-high-cpu"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 80
+  alarm_description   = "Alarm when ASG EC2 CPU exceeds 80% for 2 consecutive periods"
+  
+  dimensions = {
+    AutoScalingGroupName = module.asg.autoscaling_group_name
+  }
+
+  alarm_actions = [] # attach SNS topic if needed
+  ok_actions    = []
 }

@@ -17,7 +17,13 @@ This is my attempt at Coalfire's Terraform Technical Assessment challenge, with 
 ***Compute*** (In-progress)
   - [DONE] ec2 in an ASG running Linux (your choice) in the application subnet
     - [DONE] SG allows SSH from management ec2, allows web traffic from the Application Load Balancer. No external traffic
+    
     - [In-progress] Script the installation of Apache - Wrote in a .sh file, not implemented yet.
+      - Current apache is written in a bash file, reading through the documentations, I'm not finding the initial attribute to allow an on-boot installation of apache in the terraform module for asg.  But if I were to use ansible, i'd create an ansible task that does the following:
+        1. loads this install_apache.sh file onto the ec2 instance.
+        2. runs a cron job to run the script to install apache on initial boot.
+      - currently the "user_data" section is commented out (Line 103), to ensure that when running "terraform init/plan/apply" that the infrastructure is still built out (excluding script installation)
+
     - [DONE] 2 minimum, 6 maximum hosts
     - [DONE] t2.micro sized
 
@@ -28,38 +34,8 @@ This is my attempt at Coalfire's Terraform Technical Assessment challenge, with 
 
 ***Supporting Infrastructure***
   - [In-progress] One ALB that sends web traffic to the ec2’s in the ASG.
+    - Going through the ALB documentation for the module, it was throwing me errors when running terraform plan after init.
+    - the assumption is, the ALB will be in the management subnet along with the ec2 that's accessible via my IP (static IP), and sends web traffic(Port 80) to the ec2’s in the ASG.
+    - the ASG uses traffic_source_attachment attribute in order to talk to alb, but it was giving me a few errors, so I commented it out (Line 105 - 111) to ensure the infrastructure still builds (excluding ALB).
+
 The goal is working, deployable code — it can be minimal but must meet the requirements.
-
-### Evaluation Criteria
-We evaluate tech challenges based on
-  - Code Quality
-    ▪ Terraform best practices
-    ▪ Module usage
-    ▪ Correct resources deployed
-    ▪ Clear, maintainable code
-
-  - Operational thinking
-    ▪ Clear identification of risks
-    ▪ Realistic, prioritized improvements
-    ▪ Security controls and AWS best practices
-
-  - Architecture Design
-    ▪ Diagram clarity
-    ▪ Resource organization
-
-  - Documentation
-    ▪ Clear instructions
-    ▪ Well-documented assumptions
-    ▪ Proper reference citations
-
-  - Problem-Solving Approach
-    ▪ Solutions to challenges encountered
-    ▪ Design decisions
-    ▪ Demonstrated understanding of tradeoffs
-
-### Guidelines
-- Work independently – no collaboration
-- We do encourage use of web resources (Stack Overflow, Reddit, technical blogs, etc.) if used provide links as part of your documentation.
-- Document any assumptions and design decisions you make.
-- Be realistic about scope. Partial solutions are fine if well documented.
-- Questions welcome – reach out if you need clarification
