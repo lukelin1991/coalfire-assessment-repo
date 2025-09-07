@@ -15,15 +15,15 @@ This is my attempt at Coalfire's Terraform Technical Assessment challenge, with 
       - [DONE] Internet -> X Backend/Application 
 
 ***Compute*** (In-progress)
-  - ec2 in an ASG running Linux (your choice) in the application subnet
-    - SG allows SSH from management ec2, allows web traffic from the Application Load Balancer. No external traffic
+  - [DONE] ec2 in an ASG running Linux (your choice) in the application subnet
+    - [DONE] SG allows SSH from management ec2, allows web traffic from the Application Load Balancer. No external traffic
     - [In-progress] Script the installation of Apache - Wrote in a .sh file, not implemented yet.
     - [DONE] 2 minimum, 6 maximum hosts
     - [DONE] t2.micro sized
 
   - 1 ec2 running Linux (your choice) in the Management subnet
-    - SG allows SSH from a single specific IP or network space only
-    - Can SSH from this instance to the ASG
+    - [DONE] SG allows SSH from a single specific IP or network space only
+    - [DONE] Can SSH from this instance to the ASG
     - [DONE] t2.micro sized
 
 ***Supporting Infrastructure***

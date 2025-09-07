@@ -21,3 +21,19 @@ output "all_subnets_info" {
     }
   ]
 }
+
+output "mgmt_ec2_sg_id" {
+  value = aws_security_group.mgmt_ec2_sg.id
+}
+
+output "app_asg_sg_id" {
+  value = aws_security_group.app_asg_sg.id
+}
+
+output "mgmt_ec2_sg_ingress" {
+  value = aws_security_group.mgmt_ec2_sg.ingress
+}
+
+output "app_asg_sg_ingress" {
+  value = aws_security_group.app_asg_sg.ingress
+}
