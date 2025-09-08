@@ -99,8 +99,21 @@ module "asg" {
   image_id               = var.ami_id
 
   security_groups = [aws_security_group.app_asg_sg.id]
-  
-  # user_data = file("${path.module}/scripts/install_apache.sh") #This script was suppose to install apache server, but throwing errors currently. 
+
+  user_data = base64encode(<<-EOT
+    #!/bin/bash
+    # Update and install Apache on Ubuntu
+    apt update -y
+    apt install -y apache2
+
+    # Enable and start Apache
+    systemctl enable apache2
+    systemctl start apache2
+
+    # Create simple index.html
+    echo "<h1>Hello with apache from ASG</h1>" > /var/www/html/index.html
+  EOT
+  ) 
 
   #uses traffic_source_attachments to attach to ALB target group - CURRENTLY BROKEN.
   # traffic_source_attachments = {

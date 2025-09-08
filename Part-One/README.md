@@ -17,12 +17,15 @@ This is my attempt at Coalfire's Terraform Technical Assessment challenge, with 
 ***Compute*** (In-progress)
   - [DONE] ec2 in an ASG running Linux (your choice) in the application subnet
     - [DONE] SG allows SSH from management ec2, allows web traffic from the Application Load Balancer. No external traffic
-    
-    - [In-progress] Script the installation of Apache - Wrote in a .sh file, not implemented yet.
+
+    - [DONE?] Script the installation of Apache - Wrote in a .sh file, not implemented yet.
       - Current apache is written in a bash file, reading through the documentations, I'm not finding the initial attribute to allow an on-boot installation of apache in the terraform module for asg.  But if I were to use ansible, i'd create an ansible task that does the following:
         1. loads this install_apache.sh file onto the ec2 instance.
         2. runs a cron job to run the script to install apache on initial boot.
       - currently the "user_data" section is commented out (Line 103), to ensure that when running "terraform init/plan/apply" that the infrastructure is still built out (excluding script installation)
+
+      UPDATE: I updated the terraform in compute.tf that puts the script inline instead of in a separate file, and it seems to pass.
+      I'm working through setting up output to prove apache has been installed.
 
     - [DONE] 2 minimum, 6 maximum hosts
     - [DONE] t2.micro sized
